@@ -99,51 +99,30 @@ async function run() {
             res.send(result)
         })
 
-   
-
-        //email diye data neyar somoy jwtToken verification kora hocche
-        /* app.get('/orders', verifyToken, async (req, res) => {
- 
-            const decoded = req.decoded;//decoded info
- 
-            if (decoded.email !== req.query.email) {
-                res.status(403).send({ message: "Forbidden Access" })
-            }
- 
-            let query = {};
-            if (req.query.email) {
-                query = {
-                    email: req.query.email
-                }
-            }
-            const cursor = ordersCollection.find(query);
-            const orders = await cursor.toArray();
-            res.send(orders);
-        }) */
-
-
-
-        /* app.patch('/orders/:id', async (req, res) => {
+        app.get('/update/:id', async (req, res) => {
             const id = req.params.id;
-            const status = req.body.status;
             const query = { _id: ObjectID(id) };
-            const updateDoc = {
-                $set: {
-                    status: status
-                }
-            }
-            const result = await ordersCollection.updateOne(query, updateDoc);
-            res.send(result);
-        }) */
+            const user = await reviewsCollection.findOne(query);
+            res.send(user);
+        })
 
-        //DB er sathe kono connection nai, server nije ekta token send kortese
-        /* app.post('/jwt', (req, res) => {
-            const user = req.body;// current user er info object akare ekhane recv hocche
-            // console.log(user)
-            const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' })// user erjonno token toriri kora hocche
-            res.send({ token })// token jehetu client side a JSON akare recv hobe tai object kore pathano hocche
- 
-        }) */
+        app.put('/review/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id);
+            const filter = { _id: ObjectID(id) };
+            const review = req.body;
+            console.log(review);
+
+            const options = { upsert: true };
+            const updatedReview = {
+                $set: {
+                    reviewerMessage: review.updatedRev
+                }
+            };
+            const result = await reviewsCollection.updateOne(filter, updatedReview, options);
+            res.send(result);
+        })
+
     }
     finally {
 
