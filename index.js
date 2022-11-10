@@ -70,6 +70,24 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewsCollection.find(query);
+            const allReviews = await cursor.toArray();
+            res.send(allReviews);
+        })
+
+        app.post('/reviewsByServiceID', async (req, res) => {
+            const ids = req.body
+            // console.log(ids);
+            const filterIDS = ids.map(id => id)
+            const query = { service: { $in: filterIDS } };
+            const cursor = reviewsCollection.find(query);
+            const allReviews = await cursor.toArray();
+            res.send(allReviews);
+
+        })
+
         /*  app.get('/services/:id', async (req, res) => {
              const id = req.params.id;
              const query = { _id: ObjectID(id) };
