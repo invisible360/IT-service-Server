@@ -42,7 +42,8 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function run() {
     try {
-        const serviceCollection = client.db('itSolutionDatabase').collection('services')
+        const serviceCollection = client.db('itSolutionDatabase').collection('services');
+        const reviewsCollection = client.db('itSolutionDatabase').collection('reviews');
 
         app.get('/services', async (req, res) => {
             const query = {};
@@ -63,6 +64,12 @@ async function run() {
             res.send(service);
         })
 
+        app.post('/reviews', async (req, res) => {
+            const reviews = req.body;
+            const result = await reviewsCollection.insertOne(reviews);
+            res.send(result);
+        })
+
         /*  app.get('/services/:id', async (req, res) => {
              const id = req.params.id;
              const query = { _id: ObjectID(id) };
@@ -70,11 +77,6 @@ async function run() {
              res.send(service);
          })
   */
-        /*  app.post('/orders', async (req, res) => {
-             const order = req.body;
-             const result = await ordersCollection.insertOne(order);
-             res.send(result);
-         }) */
 
         //email diye data neyar somoy jwtToken verification kora hocche
         /* app.get('/orders', verifyToken, async (req, res) => {
