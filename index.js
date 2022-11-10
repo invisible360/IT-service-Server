@@ -78,14 +78,20 @@ async function run() {
         })
 
         app.post('/reviewsByServiceID', async (req, res) => {
-            const ids = req.body
-            // console.log(ids);
+            const ids = req.body;
             const filterIDS = ids.map(id => id)
             const query = { service: { $in: filterIDS } };
             const cursor = reviewsCollection.find(query);
             const allReviews = await cursor.toArray();
             res.send(allReviews);
 
+        })
+
+        app.delete('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectID(id) };
+            const result = await reviewsCollection.deleteOne(query)
+            res.send(result)
         })
 
         /*  app.get('/services/:id', async (req, res) => {
@@ -116,12 +122,7 @@ async function run() {
             res.send(orders);
         }) */
 
-        /* app.delete('/orders/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectID(id) };
-            const result = await ordersCollection.deleteOne(query)
-            res.send(result)
-        }) */
+
 
         /* app.patch('/orders/:id', async (req, res) => {
             const id = req.params.id;
