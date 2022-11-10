@@ -17,25 +17,6 @@ app.use(express.json());
 const dbUsername = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
-//token verfiation
-/* const verifyToken = (req, res, next) => {
-    // console.log(req.headers.authorization);
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-        return res.status(401).send({ message: 'unauthorized access' });
-    }
-    const token = authHeader.split(' ')[1]
-    // console.log(token);
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
-        if (err) {
-            return res.status(401).send({ message: 'unauthorized access' });
-        }
-        req.decoded = decoded;
-        next();
-    })
-} */
-
-
 const uri = `mongodb+srv://${dbUsername}:${dbPassword}@cluster0.bmwcolr.mongodb.net/?retryWrites=true&w=majority`;
 // console.log(uri);// for checking
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
